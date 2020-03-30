@@ -9,9 +9,11 @@ The poll plugin consists of three parts:
 1. mobile website for end users to participate in the poll
 1. API server and SQLite database to manage the poll data 
 
-When a slide is shown that has a poll, the audience can open the mobile website and vote. When the presenter clicks on one of the answers, the poll is finished and the result is shown on the slides as a bar chart.
+When a slide is shown that has a poll, the audience can open the mobile website and vote. When the presenter clicks on one of the answers, the poll is finished and the result is shown on the slides as a bar chart. All the time, when there is at least one response, the number of participations is shown on the top right corner of the poll.
 
 ![Screenshot](screenshot.png)
+
+![Screenshot](screenshot_result.png)
 
 ## Files
 
