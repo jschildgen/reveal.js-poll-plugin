@@ -2,14 +2,14 @@ $(document).ready(function() {
   get_poll();
 })
 
-COLORS = ["success", "danger", "warning", "primary"]; 
+COLORS = ["success", "danger", "warning", "primary"];
 
 current_qid = null;
 
 function get_poll() {
   $.get( "./api/?method=get_poll", function( data ) {
     if(!('question' in data)) {   // no quiz active
-      $('#question').html('- momentan keine Frage aktiv -');
+      $('#question').html('- currently no poll running -');
       $('#answers').hide();
     } else if(current_qid == data.qid) {  // current question
       return;
@@ -28,7 +28,7 @@ function get_poll() {
   });
 }
 
-function respond(aid) { 
+function respond(aid) {
   $('#answers > button').prop('disabled', true);
   $('#answers > button')[aid].innerHTML = '<b>&rightarrow; '+$('#answers > button')[aid].innerHTML+' &leftarrow;</b>';
   $.get( "./api/?method=respond&aid="+aid, function( data ) { });
