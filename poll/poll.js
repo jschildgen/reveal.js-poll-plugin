@@ -59,6 +59,7 @@ function stop_poll() {
 
 Reveal.addEventListener( 'fragmentshown', function( event ) {
     current_poll = event.fragment;
+    if(!$(current_poll).hasClass("poll")) { return; }
     start_poll();
 } );
 

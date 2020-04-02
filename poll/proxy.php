@@ -1,2 +1,2 @@
 <?php
-echo file_get_contents("https://INSERT_SERVER_HERE/api/?" . $_SERVER['QUERY_STRING']);
+echo file_get_contents("https://frage.space/api/?" . $_SERVER['QUERY_STRING']);
