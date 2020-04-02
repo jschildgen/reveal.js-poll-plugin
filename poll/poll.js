@@ -38,7 +38,8 @@ function start_poll() {
     refresh_interval = window.setInterval(show_status, 1000);
 }
 
-function stop_poll() {
+function stop_poll() { 
+    if(current_poll == null) { return; }
     clearInterval(refresh_interval);
     $(current_poll).find("ul > li > .poll-percentage").css("width","0%");
     $.get( "poll/proxy.php/?method=stop_poll", function( data ) { 
@@ -54,12 +55,13 @@ function stop_poll() {
 
         $(current_poll).find("ul > li[data-poll='correct'] > .poll-answer-text").css("font-weight", "bold");
         $(current_poll).find("ul > li[data-poll='correct'] > .poll-answer-text").each(function(i) { $(this).html("&rightarrow; "+$(this).html()+" &leftarrow;")});
+        current_poll = null;
     });
 }
 
 Reveal.addEventListener( 'fragmentshown', function( event ) {
+    if(!$(event.fragment).hasClass("poll")) { return; }
     current_poll = event.fragment;
-    if(!$(current_poll).hasClass("poll")) { return; }
     start_poll();
 } );
 
