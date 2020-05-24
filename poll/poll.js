@@ -34,7 +34,7 @@ function start_poll() {
 
     data = { "question" : question, "answers": answers, "correct_answers": correct_answers };
 
-    $.get( "poll/proxy.php/?method=start_poll&data="+JSON.stringify(data), function( res ) { });
+    $.get( "poll/proxy.php/?method=start_poll&data="+encodeURIComponent(JSON.stringify(data)), function( res ) { });
     refresh_interval = window.setInterval(show_status, 1000);
 }
 
