@@ -43,6 +43,7 @@ The web server that hosts the API and the database requires PHP and php-sqlite3.
 The presentation client needs a PHP-enabled web server to forward API requests to the server via the script proxy.php. It's also possible that the presentation client is the same machine as the web server.
 
 1. Move the content of the `poll` folder to the reveal.js presentation directory
+1. Write the URL to the server into proxy.php
 1. Include the CSS in your slides: `<link rel="stylesheet" href="poll/poll.css" />`
 1. Initialize reveal.js with the following dependency: `{ src: 'poll/poll.js', async: true }`
 1. Add polls to your slides:
