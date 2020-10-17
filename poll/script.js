@@ -24,6 +24,7 @@ function get_poll() {
           +data.answers[i]+'</button>');
       }
       $('#answers').show();
+      window.navigator.vibrate(200);
     }
   });
 }
@@ -36,4 +37,4 @@ function respond(aid) {
 
 window.setInterval(function(){
   get_poll();
-}, 5000);
+}, 3000);
