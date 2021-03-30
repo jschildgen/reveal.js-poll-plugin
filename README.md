@@ -45,6 +45,7 @@ The presentation client needs a PHP-enabled web server to forward API requests t
 1. Move the content of the `poll` folder to the reveal.js presentation directory
 1. Write the URL to the server into proxy.php
 1. Include the CSS in your slides: `<link rel="stylesheet" href="poll/poll.css" />`
+1. Add the jQuery library (download from https://jquery.com, unzip, load: `<script src="path/to/jquery.js"></script>`)
 1. Initialize reveal.js with the following dependency: `{ src: 'poll/poll.js', async: true }`
 1. Add polls to your slides:
 
