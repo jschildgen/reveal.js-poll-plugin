@@ -37,7 +37,7 @@
   line-height:1;
   overflow: hidden;
   position:relative;
-  width: 100%;
+  width: -webkit-fill-available;
   cursor: pointer;
 
   box-shadow:0 1px 1px #ccc;

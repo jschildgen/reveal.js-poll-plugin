@@ -1,6 +1,7 @@
 <?php
 session_start();
 header("Content-Type: text/json");
+header("Access-Control-Allow-Origin: *");
 
 $DB = new PDO('sqlite:./poll.db');
 $DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

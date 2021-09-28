@@ -1,19 +1,19 @@
 /*
  * Poll Plugin
  *
- * By Johannes Schildgen, 2020
+ * By Johannes Schildgen, 2021
  * https://github.com/jschildgen/reveal.js-poll-plugin
  * 
  */
- x= null;
+x= null;
 var Poll = (function(){
 
 var refresh_interval = null;
 var current_poll = null;
+var url = "http://example.com/";
 
 function show_status() {
-    $.get( "poll/proxy.php/?method=status", function( data ) { 
-        res = JSON.parse(data);
+    $.get( url+"api/?method=status", function( res ) { 
         if(!('count' in res)) { return; } // no active poll
         $(current_poll).find("> .poll-responses").html(res.count == 0 ? "" : res.count);
     });
@@ -34,7 +34,7 @@ function start_poll() {
 
     data = { "question" : question, "answers": answers, "correct_answers": correct_answers };
 
-    $.get( "poll/proxy.php/?method=start_poll&data="+encodeURIComponent(JSON.stringify(data)), function( res ) { });
+    $.get( url+"api/?method=start_poll&data="+encodeURIComponent(JSON.stringify(data)), function( res ) { });
     refresh_interval = window.setInterval(show_status, 1000);
 }
 
@@ -42,8 +42,7 @@ function stop_poll() {
     if(current_poll == null) { return; }
     clearInterval(refresh_interval);
     $(current_poll).find("ul > li > .poll-percentage").css("width","0%");
-    $.get( "poll/proxy.php/?method=stop_poll", function( data ) { 
-        res = JSON.parse(data);
+    $.get( url+"api/?method=stop_poll", function( res ) { 
         var total = 0;
         for(i in res.answers) {
             total += res.answers[i];
@@ -77,6 +76,7 @@ return {
             stop_poll();
         });
 
+        $(".poll > h2").html("<a href='"+url+"'>"+url+"</a>");
         $(".poll > ul > li").not(":has(>span)").each(function(i) {
             this.innerHTML = '<span class="poll-percentage"></span>'
                             +'<span class="poll-answer-text">'+this.innerHTML+'</span>';

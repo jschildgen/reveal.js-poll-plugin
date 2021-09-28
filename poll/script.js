@@ -19,7 +19,7 @@ function get_poll() {
       $('#answers').html('');
       for(i in data.answers) {
         $('#answers').append(
-          ' <button onClick="respond('+i+')" class="element-animation1 btn btn-lg btn-'+COLORS[i%+COLORS.length]+' btn-block" name="q_answer" value="'+i+'">'
+          ' <button onClick="respond('+i+')" class="element-animation1 btn btn-lg btn-'+COLORS[i%+COLORS.length]+' btn-block" name="q_answer" value="'+i+'" style="white-space:normal;">'
           //+ String.fromCharCode(97+parseInt(i)) + ') '
           +data.answers[i]+'</button>');
       }

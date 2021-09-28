@@ -21,7 +21,6 @@ When a slide is shown that has a poll, the audience can open the mobile website 
 - script.js Javascript logic for the mobile web site
 - poll.css Stylesheet for reveal.js
 - poll.js reveal.js Plugin
-- proxy.php PHP script that runs on the presenter machine to forward API calls to the server
 - api/index.php PHP script that handles API requests (start/stop poll, respond, ...)
 - api/poll.db SQLite database that stores the questions, answers and responses
 
@@ -40,10 +39,10 @@ The web server that hosts the API and the database requires PHP and php-sqlite3.
 
 ### Presentation Client
 
-The presentation client needs a PHP-enabled web server to forward API requests to the server via the script proxy.php. It's also possible that the presentation client is the same machine as the web server.
+The presentation client needs a PHP-enabled web server to forward API requests to the server. It's also possible that the presentation client is the same machine as the web server.
 
 1. Move the content of the `poll` folder to the reveal.js presentation directory
-1. Write the URL to the server into proxy.php
+1. Write the URL to the server into poll.js
 1. Include the CSS in your slides: `<link rel="stylesheet" href="poll/poll.css" />`
 1. Add the jQuery library (download from https://jquery.com, unzip, load: `<script src="path/to/jquery.js"></script>`)
 1. Initialize reveal.js with the following dependency: `{ src: 'poll/poll.js', async: true }`
