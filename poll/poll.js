@@ -10,10 +10,10 @@ var Poll = (function(){
 
 var refresh_interval = null;
 var current_poll = null;
-var url = "http://example.com/";
+var url = "https://fraage.de";
 
 function show_status() {
-    $.get( url+"api/?method=status", function( res ) { 
+    $.get( url+"/api/?method=status", function( res ) { 
         if(!('count' in res)) { return; } // no active poll
         $(current_poll).find("> .poll-responses").html(res.count == 0 ? "" : res.count);
     });
@@ -34,7 +34,7 @@ function start_poll() {
 
     data = { "question" : question, "answers": answers, "correct_answers": correct_answers };
 
-    $.get( url+"api/?method=start_poll&data="+encodeURIComponent(JSON.stringify(data)), function( res ) { });
+    $.get( url+"/api/?method=start_poll&data="+encodeURIComponent(JSON.stringify(data)), function( res ) { });
     refresh_interval = window.setInterval(show_status, 1000);
 }
 
@@ -42,7 +42,7 @@ function stop_poll() {
     if(current_poll == null) { return; }
     clearInterval(refresh_interval);
     $(current_poll).find("ul > li > .poll-percentage").css("width","0%");
-    $.get( url+"api/?method=stop_poll", function( res ) { 
+    $.get( url+"/api/?method=stop_poll", function( res ) { 
         var total = 0;
         for(i in res.answers) {
             total += res.answers[i];
@@ -76,7 +76,7 @@ return {
             stop_poll();
         });
 
-        $(".poll > h2").html("<a href='"+url+"'>"+url+"</a>");
+        $(".poll > h2").html(url);
         $(".poll > ul > li").not(":has(>span)").each(function(i) {
             this.innerHTML = '<span class="poll-percentage"></span>'
                             +'<span class="poll-answer-text">'+this.innerHTML+'</span>';

@@ -55,7 +55,7 @@ The presentation client needs a PHP-enabled web server to forward API requests t
    <li>Wrong answer</li>
    <li data-poll="correct">Correct answer</li>
  </ul>
- <h2>http://example.com</h2>
+ <h2></h2>
 </div>
 ```
 
