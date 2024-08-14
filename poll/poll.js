@@ -58,35 +58,36 @@ function stop_poll() {
     });
 }
 
-Reveal.addEventListener( 'fragmentshown', function( event ) {
-    if(!$(event.fragment).hasClass("poll")) { return; }
-    current_poll = event.fragment;
-    start_poll();
-} );
-
-
 return {
     init: function() {    
         if(window.location.search.match( /print-pdf/gi )) {
             /* don't show poll in print view */
             return;
         }
+        Reveal.on('ready', () => {
+            $(".poll > ul > li").not(":has(>span)").click(function() {
+                stop_poll();
+            });
 
-        $(".poll > ul > li").not(":has(>span)").click(function() { 
-            stop_poll();
+            $(".poll > h2").html(url);
+
+            $(".poll > ul > li").not(":has(>span)").each(function(i) {
+                this.innerHTML = '<span class="poll-percentage"></span>'
+                                +'<span class="poll-answer-text">'+this.innerHTML+'</span>';
+            });
+
+            $(".poll").not(":has(>.poll-responses)").each(function(i) {
+                $(this).append('<span class="poll-responses"></span>');
+            });
+
+            $(".poll").show();
+
+            Reveal.on('fragmentshown', (event) => {
+                if(!$(event.fragment).hasClass("poll")) { return; }
+                current_poll = event.fragment;
+                start_poll();
+            } );
         });
-
-        $(".poll > h2").html(url);
-        $(".poll > ul > li").not(":has(>span)").each(function(i) {
-            this.innerHTML = '<span class="poll-percentage"></span>'
-                            +'<span class="poll-answer-text">'+this.innerHTML+'</span>';
-        });
-
-        $(".poll").not(":has(>.poll-responses)").each(function(i) { 
-            $(this).append('<span class="poll-responses"></span>');
-        });
-
-        $(".poll").show();
     }
 }
 
