@@ -3,17 +3,17 @@
  *
  * By Johannes Schildgen, 2021
  * https://github.com/jschildgen/reveal.js-poll-plugin
- * 
+ *
  */
 x= null;
 var Poll = (function(){
 
 var refresh_interval = null;
 var current_poll = null;
-var url = "https://fraage.de";
+var url = document.currentScript.src.split("/").slice(0,-1).join("/");
 
 function show_status() {
-    $.get( url+"/api/?method=status", function( res ) { 
+    $.get( url+"/api/?method=status", function( res ) {
         if(!('count' in res)) { return; } // no active poll
         $(current_poll).find("> .poll-responses").html(res.count == 0 ? "" : res.count);
     });
@@ -38,11 +38,11 @@ function start_poll() {
     refresh_interval = window.setInterval(show_status, 1000);
 }
 
-function stop_poll() { 
+function stop_poll() {
     if(current_poll == null) { return; }
     clearInterval(refresh_interval);
     $(current_poll).find("ul > li > .poll-percentage").css("width","0%");
-    $.get( url+"/api/?method=stop_poll", function( res ) { 
+    $.get( url+"/api/?method=stop_poll", function( res ) {
         var total = 0;
         for(i in res.answers) {
             total += res.answers[i];
@@ -66,13 +66,13 @@ Reveal.addEventListener( 'fragmentshown', function( event ) {
 
 
 return {
-    init: function() {    
+    init: function() {
         if(window.location.search.match( /print-pdf/gi )) {
             /* don't show poll in print view */
             return;
         }
 
-        $(".poll > ul > li").not(":has(>span)").click(function() { 
+        $(".poll > ul > li").not(":has(>span)").click(function() {
             stop_poll();
         });
 
@@ -82,7 +82,7 @@ return {
                             +'<span class="poll-answer-text">'+this.innerHTML+'</span>';
         });
 
-        $(".poll").not(":has(>.poll-responses)").each(function(i) { 
+        $(".poll").not(":has(>.poll-responses)").each(function(i) {
             $(this).append('<span class="poll-responses"></span>');
         });
 
