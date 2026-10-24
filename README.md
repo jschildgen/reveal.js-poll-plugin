@@ -32,9 +32,13 @@ The web server that hosts the API and the database requires PHP and php-sqlite3.
 
 1. Move the content of the `poll` folder to the root directory of the server, let's call it http://example.com for now
 1. Make the folder `api` and the database file `api/poll.db` writable (777)
+1. Optional, but recommended: create `api/config.php` with a secret token, so that only your presentation can start and stop polls:
+   ```php
+   <?php $POLL_TOKEN = "some-long-random-secret";
+   ```
 1. Test the API with http://example.com/api, it should show "No method"
 1. Test the mobile website with http://example.com, it should show "currently no poll running"
-1. Test the API again: http://example.com/api/?method=start_poll&data={"question":"Test","answers":["X","Y","Z"],"correct_answers":["B"]}, it should show `{"OK":true}`
+1. Test the API again: http://example.com/api/?method=start_poll&data={"question":"Test","answers":["X","Y","Z"],"correct_answers":["B"]}&token=some-long-random-secret, it should show `{"OK":true}` (without the right token: `{"OK":false,"error":"Invalid token"}`)
 1. Test the mobile website again: http://example.com, It should show the question "Test" and three answers.
 
 ### Presentation Client
@@ -42,7 +46,7 @@ The web server that hosts the API and the database requires PHP and php-sqlite3.
 The presentation client needs a PHP-enabled web server to forward API requests to the server. It's also possible that the presentation client is the same machine as the web server.
 
 1. Move the content of the `poll` folder to the reveal.js presentation directory
-1. Write the URL to the server into poll.js
+1. Write the URL to the server into poll.js (and the token, if you created `api/config.php`)
 1. Include the CSS in your slides: `<link rel="stylesheet" href="poll/poll.css" />`
 1. Add the jQuery library (download from https://jquery.com, unzip, load: `<script src="path/to/jquery.js"></script>`)
 1. Initialize reveal.js with the following dependency: `{ src: 'poll/poll.js', async: true }`

@@ -3,10 +3,13 @@ session_start();
 header("Content-Type: text/json");
 header("Access-Control-Allow-Origin: *");
 
+// Optional: create config.php next to this file with $POLL_TOKEN = "some-secret";
+// Then starting and stopping polls requires that token (see poll.js).
+$POLL_TOKEN = "";
+if(file_exists(__DIR__."/config.php")) { include __DIR__."/config.php"; }
+
 $DB = new PDO('sqlite:./poll.db');
 $DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-// automatically deactivate questions after 15 minutes
-$DB->exec("UPDATE questions SET active = 0 WHERE active = 1 AND (julianday(CURRENT_TIMESTAMP)-julianday(qtime))*24*60 > 15");
 
 function cleanup_db() {
   global $DB;
@@ -23,7 +26,9 @@ function init_db() {
 }
 
 function auth($token) {
-  return array("OK" => true);
+  global $POLL_TOKEN;
+  if($POLL_TOKEN === "") { return array("OK" => true); }  /* no token configured */
+  return array("OK" => is_string($token) && hash_equals($POLL_TOKEN, $token));
 }
 
 function start_poll($question, $answers, $correct_answers) {
@@ -111,6 +116,8 @@ function respond($aid) {
 
 //cleanup_db();
 init_db();
+// automatically deactivate questions after 15 minutes
+$DB->exec("UPDATE questions SET active = 0 WHERE active = 1 AND (julianday(CURRENT_TIMESTAMP)-julianday(qtime))*24*60 > 15");
 //start_poll("What is 5+5?", array("5","10", "15","25"), array(1));
 //stop_poll();
 //print_r(get_poll());
@@ -118,6 +125,11 @@ init_db();
 
 if(!isset($_GET["method"])) { die("No method"); }
 $data = isset($_GET["data"]) ? json_decode($_GET["data"]) : array();
+
+if(in_array($_GET["method"], array("start_poll", "stop_poll")) && !auth(@$_GET["token"])["OK"]) {
+  http_response_code(403);
+  die(json_encode(array("OK" => false, "error" => "Invalid token")));
+}
 
 switch($_GET["method"]) {
   case "auth": echo json_encode(auth(@$_GET["token"])); break;

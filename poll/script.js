@@ -15,13 +15,15 @@ function get_poll() {
       return;
     } else {    // new question
       current_qid = data.qid;
-      $('#question').html(data.question);
+      // .text() instead of .html(): poll content must not inject HTML/JS
+      $('#question').text(data.question);
       $('#answers').html('');
       for(i in data.answers) {
-        $('#answers').append(
-          ' <button onClick="respond('+i+')" class="element-animation1 btn btn-lg btn-'+COLORS[i%+COLORS.length]+' btn-block" name="q_answer" value="'+i+'" style="white-space:normal;">'
-          //+ String.fromCharCode(97+parseInt(i)) + ') '
-          +data.answers[i]+'</button>');
+        $('<button>', {
+          'class': 'element-animation1 btn btn-lg btn-'+COLORS[i%COLORS.length]+' btn-block',
+          name: 'q_answer', value: i, style: 'white-space:normal;',
+          text: data.answers[i]
+        }).click(respond.bind(null, parseInt(i))).appendTo('#answers');
       }
       $('#answers').show();
       window.navigator.vibrate(200);

@@ -11,6 +11,11 @@ var Poll = (function(){
 var refresh_interval = null;
 var current_poll = null;
 var url = "https://fraage.de";
+var token = "";  // must match $POLL_TOKEN in api/config.php on the server (if set)
+
+function token_param() {
+    return token ? "&token="+encodeURIComponent(token) : "";
+}
 
 function show_status() {
     $.get( url+"/api/?method=status", function( res ) { 
@@ -24,17 +29,17 @@ function start_poll() {
 
     var answers = [];
     $(current_poll).find("ul > li > .poll-answer-text").each(function(i) {
-        answers.push(this.innerHTML);
+        answers.push(this.textContent);  // voting page shows plain text
     });
 
     var correct_answers = [];
     $(current_poll).find("ul > li[data-poll='correct'] > .poll-answer-text").each(function(i) {
-        correct_answers.push(this.innerHTML);
+        correct_answers.push(this.textContent);
     });
 
     data = { "question" : question, "answers": answers, "correct_answers": correct_answers };
 
-    $.get( url+"/api/?method=start_poll&data="+encodeURIComponent(JSON.stringify(data)), function( res ) { });
+    $.get( url+"/api/?method=start_poll&data="+encodeURIComponent(JSON.stringify(data))+token_param(), function( res ) { });
     refresh_interval = window.setInterval(show_status, 1000);
 }
 
@@ -42,7 +47,7 @@ function stop_poll() {
     if(current_poll == null) { return; }
     clearInterval(refresh_interval);
     $(current_poll).find("ul > li > .poll-percentage").css("width","0%");
-    $.get( url+"/api/?method=stop_poll", function( res ) { 
+    $.get( url+"/api/?method=stop_poll"+token_param(), function( res ) { 
         var total = 0;
         for(i in res.answers) {
             total += res.answers[i];
